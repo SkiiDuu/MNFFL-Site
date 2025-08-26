@@ -193,7 +193,7 @@ a {
   border-style: solid;
   padding: 8px;
   padding-left: 10px;
-
+  margin-right: 25px;
   border-width: 1px;
 }
 
@@ -215,6 +215,7 @@ a {
 
 .teamcard ul {
   list-style: none;
+  padding: 0;
 }
 
 #banner img {
@@ -245,6 +246,7 @@ a {
 .DEF { color: #b85d41; }
 .K { color: #b565e9; }
 .player { color: white; }
+
 .rosterAvatar {
   width: 50px;
   height: 50px;

@@ -16,4 +16,5 @@ known needed fixes:
 
 known "un-needed" fixes:
     - loading page (everything pops up at once)
+    - make team cards titles look better (less space between teamname and username)
     

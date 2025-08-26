@@ -1,10 +1,11 @@
 let currentYearID = '1183100419290038272';
+let numWeeks = 17; 
 let numOfTeams = 0;
 let yearIDs = [];
 let yearIDstest = [];
 let years = []; 
 const teams = [];
-let leagueSettings = [];
+let leagueSettings = {};
 
 async function fetchAllYears(leagueID) {
     const response = await fetch("https://api.sleeper.app/v1/league/" + leagueID);
@@ -22,19 +23,19 @@ async function fetchAllYears(leagueID) {
 }
 
 function initTeams() {
-    for (i = 0; i < numOfTeams; i++) {
+    for (let i = 0; i < numOfTeams; i++) {
         teams.push({rosterId: i + 1});
-        for (j = 0; j < years.length; j++) {
+        for (let j = 0; j < years.length; j++) {
             teams[i][years[j]] = {};
         }
     }
 }
 
 async function fetchRosterData () {
-    for (i = 0; i < years.length; i++) {
+    for (let i = 0; i < years.length; i++) {
         const response = await fetch("https://api.sleeper.app/v1/league/" + yearIDs[i] + "/rosters"); 
         const data = await response.json();
-        for (j = 0; j < data.length; j++) {
+        for (let j = 0; j < data.length; j++) {
             teamIdx = data[j].roster_id - 1;
             teams[teamIdx][years[i]]["ownerId"] = data[j].owner_id;
             teams[teamIdx][years[i]]["starters"] = data[j].starters;
@@ -51,11 +52,11 @@ async function fetchRosterData () {
 }
 
 async function fetchUserData() {
-    for (i = 0; i < years.length; i++) {
+    for (let i = 0; i < years.length; i++) {
         const response = await fetch("https://api.sleeper.app/v1/league/" + yearIDs[i] + "/users");
         const data = await response.json();
-        for (j = 0; j < data.length; j++) {
-            for (k = 0; k < teams.length; k++) { // maybe uneccesary but this finds what team each element in data is linked with
+        for (let j = 0; j < data.length; j++) {
+            for (let k = 0; k < teams.length; k++) { // maybe uneccesary but this finds what team each element in data is linked with
                 if (teams[k][years[i]]["ownerId"] == data[j].user_id) {
                     teamIdx = k;
                 }
@@ -68,8 +69,9 @@ async function fetchUserData() {
     }
 }
 
+
 async function fetchLeagueData() {
-    for (i = 0; i < years.length; i++) {
+    for (let i = 0; i < years.length; i++) {
         const response = await fetch("https://api.sleeper.app/v1/league/" + yearIDs[i]);
         const data = await response.json();
         leagueSettings[years[i]] = data;
@@ -77,15 +79,32 @@ async function fetchLeagueData() {
 }
 
 async function fetchMatchups() {
-    for (i = 0; i < years.length; i++) {
-        const response = await fetch("https://api.sleeper.app/v1/league/" + yearIDs[i]);
-        const data = await response.json();
-        leagueSettings[years[i]] = data;
+    for (let i = 0; i < years.length; i++) {
+        let weekPromises = [];
+
+        for (let j = 1; j < numWeeks + 1; j++) {
+            let url = "https://api.sleeper.app/v1/league/" + yearIDs[i] + "/matchups/" + j;
+            let promise = fetch(url).then(function(res) {
+                return res.json();
+            }); 
+            weekPromises.push(promise);
+        }
+
+        let allWeekData = await Promise.all(weekPromises);
+
+        for (let j = 0; j < allWeekData.length; j++) {
+            let data = allWeekData[j];
+            for (let k = 0; k < numOfTeams; k++) {
+                if (!teams[k][years[i]]["matchups"]) {
+                    teams[k][years[i]]["matchups"] = {};
+                }
+                teams[k][years[i]]["matchups"]["week" + (j + 1)] = data[k];
+            }
+        }
     }
 }
 
 async function loadPlayerDB() { //probably bad because you need to fetch 5MB everytime, maybe?
-
     const res = await fetch("players.json");
     const data = await res.json();
     playerDB = data;
@@ -111,55 +130,4 @@ function getPlayerPos(id) {
     console.log(playerDB[id] + " not found ");
 }
 
-if (window.location.pathname.endsWith("rosters.html")) {
-    async function genYearButtons(year) {
-        container = document.getElementById("yearButtons");
-        container.innerHTML = "";
 
-        years.forEach(year => {
-            const btn = document.createElement("button");
-            btn.textContent = year;
-            btn.classList.add("roster-button");
-            btn.onclick = () => displayRosters(year);
-            container.appendChild(btn);
-        
-        });
-    }
-
-    async function displayRosters(year) {
-        const container = document.getElementById("rosterContainer");
-
-        container.innerHTML = "";
-
-        for (i = 0; i < teams.length; i++) {
-            const teamDiv = document.createElement("div");
-            teamDiv.classList.add("teamcard");
-
-            const teamTitle = document.createElement("h2");
-            if (teams[i][year]["teamName"] == undefined) {
-                teamTitle.textContent = teams[i][year]["displayName"];
-            } else {
-                teamTitle.textContent = teams[i][year]["teamName"];
-            }
-            
-            const starterList = document.createElement("ul");
-            for (j = 0; j < teams[i][year]["starters"].length; j++) {
-                const li = document.createElement("li");
-                li.textContent = leagueSettings[year]["roster_positions"][j] + " " + getPlayerName(teams[i][year]["starters"][j]);
-                starterList.appendChild(li);
-            }
-
-            const benchList = document.createElement("ul");
-            for (j = 0; j < teams[i][year]["bench"].length; j++) {
-                const li = document.createElement("li");
-                li.textContent = getPlayerPos(teams[i][year]["bench"][j]) + " " + getPlayerName(teams[i][year]["bench"][j]);
-                benchList.appendChild(li);
-            }
-
-            teamDiv.appendChild(teamTitle);
-            teamDiv.appendChild(starterList);
-            teamDiv.appendChild(benchList);
-            container.appendChild(teamDiv);
-        }
-    }
-}

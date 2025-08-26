@@ -1,5 +1,5 @@
 
-async function genYearButtons(year) {
+/* async function genYearButtons(year) {
     container = document.getElementById("yearButtons");
     container.innerHTML = "";
     for(let i = 0; i < years.length; i++) {
@@ -9,7 +9,7 @@ async function genYearButtons(year) {
         btn.onclick = () => displayRosters(years[i]);
         container.appendChild(btn);
     }
-}
+} */
 
 async function genYearDropdown() {
     const container = document.getElementById("yearButtons"); 
@@ -31,15 +31,42 @@ async function genYearDropdown() {
         select.appendChild(option);
     }
 
-    select.onchange = (e) => {
-        displayRosters(e.target.value);
+    const weekSelect = document.createElement("select");
+    weekSelect.classList.add("roster-dropdown");
+
+    const weekPlaceholder = document.createElement("option");
+    weekPlaceholder.textContent = "Select a week";
+    weekPlaceholder.disabled = true;
+    weekPlaceholder.selected = true;
+    weekSelect.appendChild(weekPlaceholder);
+
+    for (let w = 1; w <= numWeeks; w++) {
+        const option = document.createElement("option");
+        option.value = w;
+        option.textContent = w;
+        weekSelect.appendChild(option);
+    }
+
+    select.onchange = function() {
+        let year = select.value;
+        let week = weekSelect.value;
+        if (week) {
+            displayRosters(year, week);
+        }
     };
 
+
+    /* select.onchange = (e) => {
+        displayRosters(e.target.value);
+    }; */
+
     container.appendChild(select);
+    container.appendChild(weekSelect);
 }
 
 
-async function displayRosters(year) { //massive function i feel like... getting into spagetti code territory fs.
+
+async function displayRosters(year, week) { //massive function i feel like... getting into spagetti code territory for sure.
     const container = document.getElementById("rosterContainer");
 
     container.innerHTML = "";
@@ -64,11 +91,13 @@ async function displayRosters(year) { //massive function i feel like... getting 
         if (teams[i][year]["teamName"] == undefined) {
             teamTitle.textContent = teams[i][year]["displayName"];
             //userTitle.textContent = displayName;
-            teamTitle.append(" (" + displayName + ")");
+            //teamTitle.append(" (" + displayName + ")");
+            userTitle.textContent = " (" + displayName + ")";
         } else {
             teamTitle.textContent = teams[i][year]["teamName"];
             //userTitle.textContent = displayName;
-            teamTitle.append(" (" + displayName + ")");
+            //teamTitle.append(" (" + displayName + ")");
+            userTitle.textContent = " (" + displayName + ")";
         }
 
         avatarId = teams[i][year]["avatarId"];
@@ -89,7 +118,6 @@ async function displayRosters(year) { //massive function i feel like... getting 
         const starterList = document.createElement("ul");
         for (let j = 0; j < teams[i][year]["starters"].length; j++) {
             const li = document.createElement("li");
-           /*  li.textContent = leagueSettings[year]["roster_positions"][j] + " " + getPlayerName(teams[i][year]["starters"][j]); */
            const pos =  leagueSettings[year]["roster_positions"][j];
            const name = getPlayerName(teams[i][year]["starters"][j]);
            li.innerHTML = "<span class='" + pos + "'>" + pos + "</span> " + "<span class='player'>" + name + "</span>";
@@ -99,14 +127,36 @@ async function displayRosters(year) { //massive function i feel like... getting 
         const benchList = document.createElement("ul");
         for (let j = 0; j < teams[i][year]["bench"].length; j++) {
             const li = document.createElement("li");
-            /* li.textContent = getPlayerPos(teams[i][year]["bench"][j]) + " " + getPlayerName(teams[i][year]["bench"][j]); */
             const pos = li.textContent = getPlayerPos(teams[i][year]["bench"][j]);
             const name = getPlayerName(teams[i][year]["bench"][j]);
             li.innerHTML = "<span class='" + pos + "'>" + pos + "</span> " + "<span class='player'>" + name + "</span>";
             benchList.appendChild(li);
         }
 
+
+/* 
+        const starterList = document.createElement("ul");
+        for (let j = 0; j < teams[i][year]["matchups"]["week" + week]["starters"].length; j++) {
+            const li = document.createElement("li");
+           const pos =  leagueSettings[year]["roster_positions"][j];
+           const name = getPlayerName(teams[i][year]["matchups"]["week" + week]["starters"][j]);
+           li.innerHTML = "<span class='" + pos + "'>" + pos + "</span> " + "<span class='player'>" + name + "</span>";
+            starterList.appendChild(li);
+        }
+
+        const benchList = document.createElement("ul");
+        for (let j = 0; j < teams[i][year]["matchups"]["week" + week]["players"].length; j++) {
+            if (!teams[i][year]["matchups"]["week" + week]["starters"].includes(teams[i][year]["matchups"]["week" + week]["players"][j])) { //unreadable AF but this makes sure we are adding a non-starter
+                const li = document.createElement("li");
+                const pos = li.textContent = getPlayerPos(teams[i][year]["matchups"]["week" + week]["players"][j]);
+                const name = getPlayerName(teams[i][year]["matchups"]["week" + week]["players"][j]);
+                li.innerHTML = "<span class='" + pos + "'>" + pos + "</span> " + "<span class='player'>" + name + "</span>";
+                benchList.appendChild(li);
+            }
+        } */
+
         teamDiv.appendChild(teamTitle);
+        teamDiv.appendChild(userTitle);
         teamDiv.appendChild(teamAvatar);
         //teamDiv.appendChild(userTitle);
         teamDiv.appendChild(starterList);
@@ -123,9 +173,10 @@ async function main() {
     await fetchRosterData();
     await fetchUserData();
     await fetchLeagueData();
+    await fetchMatchups();
     //await genYearButtons();
     await genYearDropdown();
-    await displayRosters(years[years.length - 1]);
+    await displayRosters(years[years.length - 2], 1);
     }
 
 main();
