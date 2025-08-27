@@ -1,16 +1,3 @@
-
-/* async function genYearButtons(year) {
-    container = document.getElementById("yearButtons");
-    container.innerHTML = "";
-    for(let i = 0; i < years.length; i++) {
-        const btn = document.createElement("button");
-        btn.textContent = years[i];
-        btn.classList.add("roster-button");
-        btn.onclick = () => displayRosters(years[i]);
-        container.appendChild(btn);
-    }
-} */
-
 async function genYearDropdown() {
     const container = document.getElementById("yearButtons"); 
     container.innerHTML = "";
@@ -58,8 +45,6 @@ async function genYearDropdown() {
         weekSelect.appendChild(option);
     }
 
-    
-
     select.onchange = function() {
         let year = select.value;
         let week = weekSelect.value;
@@ -75,11 +60,6 @@ async function genYearDropdown() {
             displayRosters(year, week);
         }
     };
-
-
-    /* select.onchange = (e) => {
-        displayRosters(e.target.value);
-    }; */
 
     container.appendChild(select);
     container.appendChild(weekSelect);
@@ -141,26 +121,6 @@ async function displayRosters(year, week) { //massive function i feel like... ge
             teamAvatar.appendChild(img);
         }
         
-/*         const starterList = document.createElement("ul");
-        for (let j = 0; j < teams[i][year]["starters"].length; j++) {
-            const li = document.createElement("li");
-           const pos =  leagueSettings[year]["roster_positions"][j];
-           const name = getPlayerName(teams[i][year]["starters"][j]);
-           li.innerHTML = "<span class='" + pos + "'>" + pos + "</span> " + "<span class='player'>" + name + "</span>";
-            starterList.appendChild(li);
-        }
-
-        const benchList = document.createElement("ul");
-        for (let j = 0; j < teams[i][year]["bench"].length; j++) {
-            const li = document.createElement("li");
-            const pos = li.textContent = getPlayerPos(teams[i][year]["bench"][j]);
-            const name = getPlayerName(teams[i][year]["bench"][j]);
-            li.innerHTML = "<span class='" + pos + "'>" + pos + "</span> " + "<span class='player'>" + name + "</span>";
-            benchList.appendChild(li);
-        } */
-
-
-
         const starterList = document.createElement("ul");
         if (teams[i][year]["matchups"]["week" + week]) { 
             for (let j = 0; j < teams[i][year]["matchups"]["week" + week]["starters"].length; j++) {
@@ -205,7 +165,6 @@ async function main() {
     await fetchUserData();
     await fetchLeagueData();
     await fetchMatchups();
-    //await genYearButtons();
     await genYearDropdown();
     await displayRosters(years[years.length - 2], 1);
     }

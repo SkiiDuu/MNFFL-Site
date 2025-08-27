@@ -1,9 +1,16 @@
-CURRENTLY ONLY COMPATIBLE WITH NFL SLEEPER LEAGUES
+*ONLY COMPATIBLE WITH NFL "SLEEPER" FANTASY LEAGUES*
+
+Simply change the currentYearID variable to your desired league ID
+
+.
+.
+.
 
 Current TODO:
-    - read sleeperapi > to get weekly matchups with weekly players > match this data with teams > make dropdown for weeks on "Rosters" page
-                                                                                                > make "Head to head" page
-    - ask Will about the rosters page layout?
+    - DATA PAGE
+        > use current team names in the table, but have a chart at the bottom of past owners and what years they controled the team for, also add an '*' for teams that did not exist in lesser team years.
+        > rememberr that i added a average index in teamsTotals in order to fill in years where there were less teams, (also maybe add to readme that if your league has varied number of teams year to year to "opt" in or out of averaging the league for the extra teams)
+
 Assumptions: 
     - users in the league dont switch teams slots at all, meaning if they left the league and came back in a differnt years they are still in the same "slot"
 
