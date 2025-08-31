@@ -7,10 +7,11 @@ Simply change the currentYearID variable to your desired league ID
 .
 
 Current TODO:
-    <br />- DATA PAGE
+    <br />-LEAGUE DATA
         <br />> use current team names in the table, but have a chart at the bottom of past owners and what years they controled the team for, also add an '*' for teams that did not exist in lesser team years.
         <br />> rememberr that i added a average index in teamsTotals in order to fill in years where there were less teams, (also maybe add to readme that if your league has varied number of teams year to year to "opt" in or out of averaging the league for the extra teams)
-    <br />- ROSTERS
+        <br />> Topics in table: fpts, fptsA, wins, losses, champs, pwins, plosses, trades, 
+    <br /> <br />- ROSTERS
         <br />> add emoji to champions per year
 
 Assumptions: 
