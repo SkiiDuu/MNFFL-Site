@@ -47,6 +47,7 @@ async function getYearsAvgs() {
     }
 }
 
+
 async function fillShortYears() {
     for (let i = 0; i < shortYears.length; i++) {
         let numOfTeamsShort = leagueSettings[shortYears[i]]["total_rosters"];
