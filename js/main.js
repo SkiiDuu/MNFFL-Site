@@ -1,4 +1,4 @@
-let currentYearID = '1183100419290038272';
+let currentYearID = '1312531385587630080';
 let numWeeks = 17; 
 let numOfTeams = 0;
 let yearIDs = [];
