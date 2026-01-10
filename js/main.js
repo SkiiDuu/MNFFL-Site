@@ -6,7 +6,7 @@ let yearIDstest = [];
 let years = []; 
 const teams = [];
 let leagueSettings = {};
-let owners = [];
+let owners = {};
 
 async function fetchAllYears(leagueID) {
     const response = await fetch("https://api.sleeper.app/v1/league/" + leagueID);
@@ -61,6 +61,13 @@ async function fetchUserData() {
                 if (teams[k][years[i]]["ownerId"] == data[j].user_id) {
                     teamIdx = k;
                 }
+            }
+            if (owners[data[j].user_id]) {
+                if (!owners[data[j].user_id].includes(data[j].display_name)) {
+                    owners[data[j].user_id].push(data[j].display_name);
+                }
+            } else {
+                owners[data[j].user_id] = [data[j].display_name];
             }
             teams[teamIdx][years[i]]["teamName"] = data[j].metadata.team_name;
             teams[teamIdx][years[i]]["displayName"] = data[j].display_name; //the "Rich" line

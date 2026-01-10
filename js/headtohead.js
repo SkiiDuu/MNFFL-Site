@@ -12,7 +12,10 @@ async function genTeamDropdown() {
     select.appendChild(placeholderOption);
 
     for (let i = 0; i < teams.length; i++) {
-        
+        const option = document.createElement("option");
+        option.value = teams[i][years[-1]]["teamName"];
+        option.textContent = teams[i][years[-1]]["teamName"];
+        select.appendChild(option);
     }
 }
 
@@ -30,3 +33,4 @@ async function main() {
 main();
 console.log(teams);
 console.log(leagueSettings);
+console.log(owners);
