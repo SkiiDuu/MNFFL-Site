@@ -6,6 +6,7 @@ let yearIDstest = [];
 let years = []; 
 const teams = [];
 let leagueSettings = {};
+let owners = [];
 
 async function fetchAllYears(leagueID) {
     const response = await fetch("https://api.sleeper.app/v1/league/" + leagueID);

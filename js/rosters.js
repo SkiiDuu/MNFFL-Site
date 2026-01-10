@@ -1,4 +1,4 @@
-async function genYearDropdown() {
+async function genYearDropdown() { // contrary to the title of the function, this gen's year and week dropdowns...
     const container = document.getElementById("yearButtons"); 
     container.innerHTML = "";
 
