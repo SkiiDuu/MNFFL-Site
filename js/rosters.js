@@ -21,19 +21,6 @@ async function genYearDropdown() { // contrary to the title of the function, thi
     const weekSelect = document.createElement("select");
     weekSelect.classList.add("roster-dropdown");
 
-/*     const weekPlaceholder = document.createElement("option");
-    weekPlaceholder.textContent = "Select a week";
-    weekPlaceholder.disabled = true;
-    weekPlaceholder.selected = true;
-    weekSelect.appendChild(weekPlaceholder);
-
-    for (let w = 1; w <= numWeeks; w++) {
-        const option = document.createElement("option");
-        option.value = w;
-        option.textContent = w;
-        weekSelect.appendChild(option);
-    } */
-
     for (let w = 1; w <= numWeeks; w++) {
         const option = document.createElement("option");
         option.value = w;

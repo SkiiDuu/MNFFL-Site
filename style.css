@@ -197,6 +197,19 @@ a {
   border-width: 1px;
 }
 
+.h2h-dropdown {
+  font-size: 22px;
+  background-color: #1f1d1d;
+  border-color: white;
+  color: white;
+  border-radius: 11%;
+  cursor: pointer;
+  border-style: solid;
+  padding: 8px;
+  padding-left: 10px;
+  margin-right: 25px;
+  border-width: 1px;
+}
 #rosterContainer {
   display: flex;
   flex-wrap: wrap;
