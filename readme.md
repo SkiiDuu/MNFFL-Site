@@ -25,7 +25,9 @@ known needed fixes:
     -due to things like matchups using roster_id to id differnt people, maybe add in a variable that tracks which name is associated with that id number per year, like if someone changes roster_id's for some reason......
     - in leagueSettings the array is of length 2026 because leagueSettings[year] makes it of year legnth and not of years.length length, this issue is integreated with much of the logic within the displayRosters function.
     - make the website only fetch the rosters of the league once (ie. not everytime you open rosters, or h2h, etc, but once when you open the website)
+    - Add champion logo next to teams that won per year in rosters
     - Hosting the website...
+
 known "un-needed" fixes:
     - add text box page on the final website to enter in your leagues id to fill everything in
     - loading page (everything pops up at once)

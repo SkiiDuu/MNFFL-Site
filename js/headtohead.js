@@ -46,6 +46,14 @@ async function genHeadToHeadSelectors() {
     container.appendChild(button);
 }
 
+async function fetchMatchupStats(team1, team2) {
+    // get stats like: total points for each team, total record (team 1 first), each match up (who won, points for each, year, week, playoffs?, unique things that matchup(teamname, logo)), rosters?, 
+}
+
+async function displayMatchups(team1, team2) {
+    fetchMatchupStats(team1, team2);
+}
+
 async function main() {
     await fetchAllYears(currentYearID);
     await initTeams();
