@@ -62,19 +62,39 @@ async function fetchUserData() {
                     teamIdx = k;
                 }
             }
-            if (owners[data[j].user_id]) {
+            /* if (owners[data[j].user_id]) {
                 if (!owners[data[j].user_id].includes(data[j].display_name)) {
                     owners[data[j].user_id].push(data[j].display_name);
                 }
             } else {
                 owners[data[j].user_id] = [data[j].display_name];
-            }
+                owners[data[j].user_id].push()
+            } */
             teams[teamIdx][years[i]]["teamName"] = data[j].metadata.team_name;
             teams[teamIdx][years[i]]["displayName"] = data[j].display_name; //the "Rich" line
             teams[teamIdx][years[i]]["teamAvatar"] = data[j].metadata.avatar;
             teams[teamIdx][years[i]]["avatarId"] = data[j].avatar; //the "Rich + Noah" line
         }
     }
+}
+
+async function fetchOwnerData() {
+    for (let i = 0; i < teams.length; i++) {
+         for (let j = 0; j < years.length; j++) {
+            let ownerId = teams[i][years[j]]["ownerId"];
+            if (ownerId == "983169106620846080") { // special line because bbking in my league made a second account when he joined back into the league
+                owners['1223692387906240512'].push([teams[i][years[j]]["displayName"], years[j], teams[i]["rosterId"]]);
+            } else {
+                if (ownerId != undefined) {
+                    if (!owners[ownerId]) {
+                        owners[ownerId] = [];
+                    }
+                    owners[ownerId].push([teams[i][years[j]]["displayName"], years[j], teams[i]["rosterId"]]);
+                }
+            }
+         }
+    }
+    
 }
 
 

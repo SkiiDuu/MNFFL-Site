@@ -1,3 +1,5 @@
+let currentMatchupstats = {};
+
 function createTeamDropdown(id) {
     const select = document.createElement("select");
     select.classList.add("h2h-dropdown");
@@ -48,6 +50,34 @@ async function genHeadToHeadSelectors() {
 
 async function fetchMatchupStats(team1, team2) {
     // get stats like: total points for each team, total record (team 1 first), each match up (who won, points for each, year, week, playoffs?, unique things that matchup(teamname, logo)), rosters?, 
+
+}
+
+
+async function fetchMatchups() {
+    for (let i = 0; i < years.length; i++) {
+        let weekPromises = [];
+
+        for (let j = 1; j < numWeeks + 1; j++) {
+            let url = "https://api.sleeper.app/v1/league/" + yearIDs[i] + "/matchups/" + j;
+            let promise = fetch(url).then(function(res) {
+                return res.json();
+            }); 
+            weekPromises.push(promise);
+        }
+
+        let allWeekData = await Promise.all(weekPromises);
+
+        for (let j = 0; j < allWeekData.length; j++) {
+            let data = allWeekData[j];
+            for (let k = 0; k < numOfTeams; k++) {
+                if (!teams[k][years[i]]["matchups"]) {
+                    teams[k][years[i]]["matchups"] = {};
+                }
+                teams[k][years[i]]["matchups"]["week" + (j + 1)] = data[k];
+            }
+        }
+    }
 }
 
 async function displayMatchups(team1, team2) {
@@ -62,6 +92,7 @@ async function main() {
     await fetchUserData();
     await fetchLeagueData();
     await fetchMatchups();
+    await fetchOwnerData();
     await genHeadToHeadSelectors(); 
     }
 
