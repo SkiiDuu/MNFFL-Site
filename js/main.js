@@ -83,7 +83,7 @@ async function fetchOwnerData() {
          for (let j = 0; j < years.length; j++) {
             let ownerId = teams[i][years[j]]["ownerId"];
             if (ownerId == "983169106620846080") { // special line because bbking in my league made a second account when he joined back into the league
-                owners['1223692387906240512'].push([teams[i][years[j]]["displayName"], years[j], teams[i]["rosterId"]]);
+                owners['1223692387906240512'].unshift([teams[i][years[j]]["displayName"], years[j], teams[i]["rosterId"]]);
             } else {
                 if (ownerId != undefined) {
                     if (!owners[ownerId]) {

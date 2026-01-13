@@ -1,4 +1,4 @@
-let currentMatchupstats = {};
+let currentMatchupStats = {};
 
 function createTeamDropdown(id) {
     const select = document.createElement("select");
@@ -15,7 +15,7 @@ function createTeamDropdown(id) {
         const names = owners[ownerId];
         const option = document.createElement("option");
         option.value = ownerId
-        option.textContent = names[names.length - 1]
+        option.textContent = names[names.length - 1][0]
 
         select.appendChild(option);
     }
@@ -50,33 +50,52 @@ async function genHeadToHeadSelectors() {
 
 async function fetchMatchupStats(team1, team2) {
     // get stats like: total points for each team, total record (team 1 first), each match up (who won, points for each, year, week, playoffs?, unique things that matchup(teamname, logo)), rosters?, 
-
-}
-
-
-async function fetchMatchups() {
-    for (let i = 0; i < years.length; i++) {
-        let weekPromises = [];
-
-        for (let j = 1; j < numWeeks + 1; j++) {
-            let url = "https://api.sleeper.app/v1/league/" + yearIDs[i] + "/matchups/" + j;
-            let promise = fetch(url).then(function(res) {
-                return res.json();
-            }); 
-            weekPromises.push(promise);
-        }
-
-        let allWeekData = await Promise.all(weekPromises);
-
-        for (let j = 0; j < allWeekData.length; j++) {
-            let data = allWeekData[j];
-            for (let k = 0; k < numOfTeams; k++) {
-                if (!teams[k][years[i]]["matchups"]) {
-                    teams[k][years[i]]["matchups"] = {};
-                }
-                teams[k][years[i]]["matchups"]["week" + (j + 1)] = data[k];
+    let commonYears = [];
+    let team1TotalPoints = 0;
+    let team2TotalPoints = 0;
+    for (let i = 0; i < owners[team1].length; i++) { // get the years that the 2 teams have in common
+        for (let j = 0; j < owners[team2].length; j++) {
+            if (owners[team1][i][1] == owners[team2][j][1]) {
+                commonYears.push(owners[team1][i][1]);
             }
         }
+    }
+    currentMatchupStats['commonYears'] = commonYears;
+
+    if (commonYears.length == 0) {
+        alert('${owners[team1][-1][0]} and ${owners[team2][-1][0]} have never played head-to-head!');
+        return;
+    }
+    for (let i = 0; i < commonYears.length; i++) {
+        let team1Idx = owners[team1][i][2] - 1
+        let team2Idx = owners[team2][i][2] - 1
+        for (let j = 1; j <= numWeeks; j++) {
+            if (teams[team1Idx][commonYears[i]]['matchups']['week' + j]['matchup_id'] == teams[team2Idx][commonYears[i]]['matchups']['week' + j]['matchup_id']) { // nasty code, if the two teams did have a match up that week...
+                if ((j < leagueSettings[commonYears[i]]['settings']['playoff_week_start']) || (verifyPostseasonGame(j, teams[team1Idx][commonYears[i]]['matchups']['week' + j]['matchup_id'], leagueSettings[commonYears[i]]['settings']['playoff_teams']) == 0)) { // ... AND that game was EITHER in regular season OR it was a meaningful playoff game (not a game where the two teams were eliminated where neither teams sets their rosters)
+                    team1TotalPoints += teams[team1Idx][commonYears[i]]['matchups']['week' + j]['points'];
+                    team2TotalPoints += teams[team2Idx][commonYears[i]]['matchups']['week' + j]['points'];
+                    currentMatchupStats[commonYears[i]]['team1Pts'] = teams[team1Idx][commonYears[i]]['matchups']['week' + j]['points'];
+                    currentMatchupStats[commonYears[i]]['team2Pts'] = teams[team2Idx][commonYears[i]]['matchups']['week' + j]['points'];
+                }
+            }
+        }
+    }
+    console.log(currentMatchupStats);
+}
+
+function verifyPostseasonGame(week, matchId, playoffSpots) { //disgusting code, but I did'nt feel like finding the equation that verifies a playoff game
+    if (week == 17 && matchId == 1) {
+        return 0;
+    } else if (week == 16 && matchId <= 2) {
+        return 0;
+    } else if (week == 15 && matchId <= 2) {
+        return 0;
+    } else if (playoffSpots > 6 && (week == 15 && matchId <= 3)) {
+        return 0;
+    } else if (playoffSpots == 8 && (week == 15 && matchId <= 4)) {
+        return 0;
+    } else {
+        return -1;
     }
 }
 
@@ -94,6 +113,7 @@ async function main() {
     await fetchMatchups();
     await fetchOwnerData();
     await genHeadToHeadSelectors(); 
+    await fetchMatchupStats("466064624756715520", "470799445009625088")
     }
 
 main();

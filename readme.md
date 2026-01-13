@@ -17,6 +17,7 @@ Current TODO:
 Assumptions: 
     - The league uses Sleeper
     - users in the league dont switch teams slots at all, meaning if they left the league and came back in a different year they are still in the same "slot" that they were in before
+    - best results for head-to-head and playoff stats requires that your league playoffs start on 15, end week 17, 6-8 teams make the playoffs 
 
 known needed fixes:
     -fixup the main.js file with the years and years codes situation\
