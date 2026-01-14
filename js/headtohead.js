@@ -51,8 +51,6 @@ async function genHeadToHeadSelectors() {
 async function fetchMatchupStats(team1, team2) {
     // get stats like: total points for each team, total record (team 1 first), each match up (who won, points for each, year, week, playoffs?, unique things that matchup(teamname, logo)), rosters?, 
     let commonYears = [];
-    let team1TotalPoints = 0;
-    let team2TotalPoints = 0;
     for (let i = 0; i < owners[team1].length; i++) { // get the years that the 2 teams have in common
         for (let j = 0; j < owners[team2].length; j++) {
             if (owners[team1][i][1] == owners[team2][j][1]) {
@@ -61,26 +59,44 @@ async function fetchMatchupStats(team1, team2) {
         }
     }
     currentMatchupStats['commonYears'] = commonYears;
+    currentMatchupStats['team1TotalPoints'] = 0;
+    currentMatchupStats['team2TotalPoints'] = 0;
 
     if (commonYears.length == 0) {
-        alert('${owners[team1][-1][0]} and ${owners[team2][-1][0]} have never played head-to-head!');
+        alert(`${owners[team1].at(-1)[0]} and ${owners[team2].at(-1)[0]} have never played head-to-head!`);
+
         return;
     }
     for (let i = 0; i < commonYears.length; i++) {
-        let team1Idx = owners[team1][i][2] - 1
+        let team1Idx = owners[team1][i][2] - 1 // is this wrongs, i think so upon a glance...
         let team2Idx = owners[team2][i][2] - 1
         for (let j = 1; j <= numWeeks; j++) {
-            if (teams[team1Idx][commonYears[i]]['matchups']['week' + j]['matchup_id'] == teams[team2Idx][commonYears[i]]['matchups']['week' + j]['matchup_id']) { // nasty code, if the two teams did have a match up that week...
-                if ((j < leagueSettings[commonYears[i]]['settings']['playoff_week_start']) || (verifyPostseasonGame(j, teams[team1Idx][commonYears[i]]['matchups']['week' + j]['matchup_id'], leagueSettings[commonYears[i]]['settings']['playoff_teams']) == 0)) { // ... AND that game was EITHER in regular season OR it was a meaningful playoff game (not a game where the two teams were eliminated where neither teams sets their rosters)
-                    team1TotalPoints += teams[team1Idx][commonYears[i]]['matchups']['week' + j]['points'];
-                    team2TotalPoints += teams[team2Idx][commonYears[i]]['matchups']['week' + j]['points'];
-                    currentMatchupStats[commonYears[i]]['team1Pts'] = teams[team1Idx][commonYears[i]]['matchups']['week' + j]['points'];
-                    currentMatchupStats[commonYears[i]]['team2Pts'] = teams[team2Idx][commonYears[i]]['matchups']['week' + j]['points'];
+            if (leagueSettings[commonYears[i]]['settings']['leg'] < 15 && teams[team1Idx][commonYears[i]]['matchups']['week' + j] == undefined && teams[team2Idx][commonYears[i]]['matchups']['week' + j] == undefined) {
+                return;
+            }
+            if (teams[team1Idx][commonYears[i]]['matchups']['week' + j]['matchup_id'] == teams[team2Idx][commonYears[i]]['matchups']['week' + j]['matchup_id']) { // nasty code but... IF the two teams DID match up that week...
+                if ((j < leagueSettings[commonYears[i]]['settings']['playoff_week_start']) || (verifyPostseasonGame(j, teams[team1Idx][commonYears[i]]['matchups']['week' + j]['matchup_id'], leagueSettings[commonYears[i]]['settings']['playoff_teams']) == 0)) { // ... AND that game was EITHER in regular season OR it was a meaningful playoff game (not a game where the two teams were eliminated where neither teams sets their rosters), THEN its valid
+                    currentMatchupStats[commonYears[i] + "_" + j] = {
+                        matchup: []
+                    };
+                    currentMatchupStats['team1TotalPoints'] += teams[team1Idx][commonYears[i]]['matchups']['week' + j]['points'];
+                    currentMatchupStats['team2TotalPoints'] += teams[team2Idx][commonYears[i]]['matchups']['week' + j]['points'];
+                    currentMatchupStats[commonYears[i] + "_" + j]['team1Pts'] = teams[team1Idx][commonYears[i]]['matchups']['week' + j]['points'];
+                    currentMatchupStats[commonYears[i] + "_" + j]['team2Pts'] = teams[team2Idx][commonYears[i]]['matchups']['week' + j]['points'];
+                    currentMatchupStats[commonYears[i] + "_" + j]['matchup'].push(commonYears[i]);
+                    currentMatchupStats[commonYears[i] + "_" + j]['matchup'].push(j);
+                    currentMatchupStats[commonYears[i] + "_" + j]['team1Avatar'] = teams[team1Idx][commonYears[i]]["avatarId"];
+                    currentMatchupStats[commonYears[i] + "_" + j]['team2Avatar'] = teams[team2Idx][commonYears[i]]["avatarId"];
+                    // decided not to include roster stuff becuase if someone really wants to see the rosters that each team had in a past matchup they can easily find it in sleeper with the info that is given about the matchup!
+                    if (j > 14) {
+                        currentMatchupStats[commonYears[i] + "_" + j]["playoff"] = true;
+                    } else {
+                        currentMatchupStats[commonYears[i] + "_" + j]["playoff"] = false;
+                    }
                 }
             }
         }
     }
-    console.log(currentMatchupStats);
 }
 
 function verifyPostseasonGame(week, matchId, playoffSpots) { //disgusting code, but I did'nt feel like finding the equation that verifies a playoff game
@@ -113,10 +129,11 @@ async function main() {
     await fetchMatchups();
     await fetchOwnerData();
     await genHeadToHeadSelectors(); 
-    await fetchMatchupStats("466064624756715520", "470799445009625088")
+    await fetchMatchupStats("470052994147151872", "470799445009625088")
     }
 
 main();
 console.log(teams);
 console.log(leagueSettings);
 console.log(owners);
+console.log(currentMatchupStats);
