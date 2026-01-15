@@ -114,8 +114,18 @@ async function fetchMatchupStats(team1, team2) {
 
                     tempMatchupStats[commonYears[i] + "_" + j]['team1AvatarLink'] = team1AvatarLink;
                     tempMatchupStats[commonYears[i] + "_" + j]['team2AvatarLink'] = team2AvatarLink;
-                    tempMatchupStats[commonYears[i] + "_" + j]['team1Name'] = teams[team1Idx][commonYears[i]]["teamName"];
-                    tempMatchupStats[commonYears[i] + "_" + j]['team2Name'] = teams[team2Idx][commonYears[i]]["teamName"];
+
+                    if (teams[team1Idx][commonYears[i]]["teamName"] != undefined) {
+                        tempMatchupStats[commonYears[i] + "_" + j]['team1Name'] = teams[team1Idx][commonYears[i]]["teamName"];
+                    } else {
+                        tempMatchupStats[commonYears[i] + "_" + j]['team1Name'] = teams[team1Idx][commonYears[i]]["displayName"];
+                    }
+                    
+                    if (teams[team2Idx][commonYears[i]]["teamName"] != undefined) {
+                        tempMatchupStats[commonYears[i] + "_" + j]['team2Name'] = teams[team2Idx][commonYears[i]]["teamName"];
+                    } else {
+                        tempMatchupStats[commonYears[i] + "_" + j]['team2Name'] = teams[team2Idx][commonYears[i]]["displayName"];
+                    }
 
 
                     if (tempMatchupStats[commonYears[i] + "_" + j]['team1Pts'] > tempMatchupStats[commonYears[i] + "_" + j]['team2Pts']) {
@@ -250,7 +260,6 @@ function createMatchupCard(matchup) {
     latestYearIdx1 = owners[playerId1].length - 1;
     latestYearIdx2 = owners[playerId2].length - 1;
 
-    console.log(currentMatchupStats);
     const team1Line = createMatchupTeamLine(
         currentMatchupStats['matchups'][matchup]['team1Name'], //team name
         currentMatchupStats['matchups'][matchup]['team1AvatarLink'], // avatar
