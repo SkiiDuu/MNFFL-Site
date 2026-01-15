@@ -82,21 +82,26 @@ async function fetchOwnerData() {
     for (let i = 0; i < teams.length; i++) {
          for (let j = 0; j < years.length; j++) {
             let ownerId = teams[i][years[j]]["ownerId"];
+            avatarId = teams[i][years[j]]["avatarId"];
+            if (teams[i][years[j]]["teamAvatar"] != undefined) {
+                teamAvatarLink = teams[i][years[j]]["teamAvatar"];
+            } else {
+                teamAvatarLink = "https://sleepercdn.com/avatars/" + avatarId;
+            }
             if (ownerId == "983169106620846080") { // special line because bbking in my league made a second account when he joined back into the league
-                owners['1223692387906240512'].unshift([teams[i][years[j]]["displayName"], years[j], teams[i]["rosterId"]]);
+                owners['1223692387906240512'].unshift([teams[i][years[j]]["displayName"], years[j], teams[i]["rosterId"], teams[i][years[j]]["teamName"], teamAvatarLink]);
             } else {
                 if (ownerId != undefined) {
                     if (!owners[ownerId]) {
                         owners[ownerId] = [];
                     }
-                    owners[ownerId].push([teams[i][years[j]]["displayName"], years[j], teams[i]["rosterId"]]);
+                    owners[ownerId].push([teams[i][years[j]]["displayName"], years[j], teams[i]["rosterId"], teams[i][years[j]]["teamName"], teamAvatarLink]);
                 }
             }
          }
     }
     
 }
-
 
 async function fetchLeagueData() {
     for (let i = 0; i < years.length; i++) {

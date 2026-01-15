@@ -266,3 +266,125 @@ a {
   object-fit: cover;
   border-radius: 100%;
 }
+
+/*Head to Head css starts here*/
+#teamsContainer {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.matchup-summary {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 24px;
+
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #444;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+
+  color: #ccc;
+}
+
+.team-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+}
+
+
+.team-logo {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #667;
+}
+
+
+.team-summary h2 {
+  margin: 0;
+  font-size: 22px;
+  color: white;
+}
+
+.team-summary p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.vs-divider {
+  font-size: 28px;
+  font-weight: bold;
+  color: white;
+  padding: 0 10px;
+  text-shadow: 2px 2px 6px rgba(0,0,0,1);
+}
+
+.matchup-history {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.matchup-card {
+  position: relative;
+
+  padding: 14px 18px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+
+  color: #ccc;
+}
+
+.matchup-card h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  color: white;
+}
+
+.matchup-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.matchup-team-line {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.small-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.matchup-team-line span {
+  font-size: 14px;
+  color: white;
+}
+
+.playoff-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  background-color: #c12d60;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+
+  padding: 4px 8px;
+  border-radius: 6px;
+}

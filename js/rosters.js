@@ -64,7 +64,7 @@ async function displayRosters(year, week) { //massive function i feel like... ge
 
     container.innerHTML = "";
 
-    for (let i = 0; i < leagueSettings[year]["total_rosters"]; i++) {
+    for (let i = 0; i < leagueSettings[year]["total_rosters"]; i++) { 
         const teamDiv = document.createElement("div");
         teamDiv.classList.add("teamcard");
 
