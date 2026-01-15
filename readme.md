@@ -33,4 +33,3 @@ known "un-needed" fixes:
     - add text box page on the final website to enter in your leagues id to fill everything in
     - loading page (everything pops up at once)
     - make team cards titles look better (less space between teamname and username)
-    - make title on title page automatically connect to correct league, same with the thumbnail

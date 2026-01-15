@@ -118,8 +118,8 @@ a {
              -2px 2px 6px rgba(0, 0, 0, 1);
 }
 
-.menu-players {
-  background-image: url('assets/players2.png');
+.menu-records {
+  background-image: url('assets/records.png');
   text-shadow: 2px 2px 6px rgba(0, 0, 0, 1),
              -2px -2px 6px rgba(0, 0, 0, 1),
              2px -2px 6px rgba(0, 0, 0, 1),
