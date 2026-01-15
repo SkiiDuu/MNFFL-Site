@@ -63,12 +63,14 @@ async function fillShortYears() {
 
 async function main() {
     await fetchAllYears(currentYearID);
+    await fetchLeagueData();
+    setLeagueFavicon(leagueSettings[years[years.length - 1]]['avatar']);
+    setLeagueSubPageLogo(leagueSettings[years[years.length - 1]]['avatar']);
     await initTeams();
     await initYearsAvgs();
     await fetchRosterData();
     await fetchUserData();
     await initTeamsTotals();
-    await fetchLeagueData();
     await getTotalsData();
     await getYearsAvgs();
     await fillShortYears();

@@ -146,16 +146,19 @@ async function displayRosters(year, week) { //massive function i feel like... ge
 
 async function main() {
     await fetchAllYears(currentYearID);
+    await fetchLeagueData();
+    setLeagueFavicon(leagueSettings[years[years.length - 1]]['avatar']);
+    setLeagueSubPageLogo(leagueSettings[years[years.length - 1]]['avatar']);
     await initTeams();
     await loadPlayerDB();
     await fetchRosterData();
     await fetchUserData();
-    await fetchLeagueData();
     await fetchMatchups();
     await genYearDropdown();
     await displayRosters(years[years.length - 2], 1);
+    
     }
 
 main();
-console.log(teams);
-console.log(leagueSettings);
+/* console.log(teams);
+console.log(leagueSettings); */

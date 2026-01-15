@@ -163,4 +163,16 @@ function getPlayerPos(id) {
     console.log(playerDB[id] + " not found ");
 }
 
+function setLeagueFavicon(avatarId) {
+    const favicon = document.getElementById("favicon");
+    favicon.href = `https://sleepercdn.com/avatars/${avatarId}`;
+}
 
+function setLeagueSubPageLogo(avatarId) {
+    const logo = document.getElementById("league-logo");
+    if (!logo) return;
+
+    logo.src = avatarId
+        ? `https://sleepercdn.com/avatars/${avatarId}`
+        : "assets/MNFFL2026.png";
+}

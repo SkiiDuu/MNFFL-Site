@@ -15,9 +15,20 @@ async function generateBanner() {
     }
 }
 
+function setLeagueName(name) {
+    const el = document.getElementById("league-name");
+    if (!el) return;
+
+    el.textContent = name;
+}
+
+
 async function main(){
     await fetchAllYears(currentYearID);
     await generateBanner();
+    await fetchLeagueData();
+    setLeagueFavicon(leagueSettings[years[years.length - 1]]['avatar']);
+    setLeagueName(leagueSettings[years[years.length - 1]]['name']);
 }
 
 main();

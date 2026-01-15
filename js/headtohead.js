@@ -312,19 +312,21 @@ function createMatchupTeamLine(name, avatarId, points) {
 
 async function main() {
     await fetchAllYears(currentYearID);
+    await fetchLeagueData();
+    setLeagueFavicon(leagueSettings[years[years.length - 1]]['avatar']);
+    setLeagueSubPageLogo(leagueSettings[years[years.length - 1]]['avatar']);
     await initTeams();
     await loadPlayerDB();
     await fetchRosterData();
     await fetchUserData();
-    await fetchLeagueData();
     await fetchMatchups();
     await fetchOwnerData();
-    await genHeadToHeadSelectors(); 
+    await genHeadToHeadSelectors();
     //await fetchMatchupStats("470052994147151872", "470799445009625088")
     }
 
 main();
-console.log(teams);
+/* console.log(teams);
 console.log(leagueSettings);
 console.log(owners);
-console.log(currentMatchupStats);
+console.log(currentMatchupStats); */
