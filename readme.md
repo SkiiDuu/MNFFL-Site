@@ -15,22 +15,22 @@ Current TODO:
         <br />> add emoji to champions per year
 
 Assumptions: 
-    - The league uses Sleeper
-    - users in the league dont switch teams slots at all, meaning if they left the league and came back in a different year they are still in the same "slot" that they were in before
-    - best results for head-to-head and playoff stats requires that your league playoffs start on 15, end week 17, 6-8 teams make the playoffs 
-    - The NFL doesnt add/subtract weeks from the regular season
+    <br />- The league uses Sleeper
+    <br />- users in the league dont switch teams slots at all, meaning if they left the league and came back in a different year they are still in the same "slot" that they were in before
+    <br />- best results for head-to-head and playoff stats requires that your league playoffs start on 15, end week 17, 6-8 teams make the playoffs 
+    <br />- The NFL doesnt add/subtract weeks from the regular season
 
 known needed fixes:
-    -fixup the main.js file with the years and years codes situation\
-    -find the correct way to do the right franchises and stuff (the roster_id meathod is bad for poritibility)
-    -add past names, in the users fetch part
-    -due to things like matchups using roster_id to id differnt people, maybe add in a variable that tracks which name is associated with that id number per year, like if someone changes roster_id's for some reason......
-    - in leagueSettings the array is of length 2026 because leagueSettings[year] makes it of year legnth and not of years.length length, this issue is integreated with much of the logic within the displayRosters function.
-    - make the website only fetch the rosters of the league once (ie. not everytime you open rosters, or h2h, etc, but once when you open the website)
-    - Add champion logo next to teams that won per year in rosters
-    - Hosting the website...
+    <br />-fixup the main.js file with the years and years codes situation\
+    <br />-find the correct way to do the right franchises and stuff (the roster_id meathod is bad for poritibility)
+    <br />-add past names, in the users fetch part
+    <br />-due to things like matchups using roster_id to id differnt people, maybe add in a variable that tracks which name is associated with that id number per year, like if someone changes roster_id's for some reason......
+   <br /> - in leagueSettings the array is of length 2026 because leagueSettings[year] makes it of year legnth and not of years.length length, this issue is integreated with much of the logic within the displayRosters function.
+    <br />- make the website only fetch the rosters of the league once (ie. not everytime you open rosters, or h2h, etc, but once when you open the website)
+    <br />- Add champion logo next to teams that won per year in rosters
+   <br /> - Hosting the website...
 
 known "un-needed" fixes:
-    - add text box page on the final website to enter in your leagues id to fill everything in
-    - loading page (everything pops up at once)
-    - make team cards titles look better (less space between teamname and username)
+   <br /> - add text box page on the final website to enter in your leagues id to fill everything in
+    <br />- loading page (everything pops up at once)
+   <br /> - make team cards titles look better (less space between teamname and username)
