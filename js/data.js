@@ -122,6 +122,174 @@ function populatePlayoffStats(yearIdx, teamIdx, week, id) {
     }
 }
 
+//AI used to create the display functions below
+
+/* ============================
+   SORTABLE LEAGUE DATA TABLES
+   ============================ */
+
+function displayLeagueData() {
+    const container = document.getElementById("leagueDataContainer");
+    container.innerHTML = "";
+
+    container.appendChild(createTeamsTotalsTable());
+    container.appendChild(createYearsAveragesTable());
+}
+
+/* ---------- TABLE HELPERS ---------- */
+
+function createTable(headers, rows, defaultSort = 0) {
+    const table = document.createElement("table");
+    table.style.width = "100%";
+    table.style.borderCollapse = "collapse";
+
+    const thead = document.createElement("thead");
+    const headerRow = document.createElement("tr");
+
+    headers.forEach((header, idx) => {
+        const th = document.createElement("th");
+        th.textContent = header;
+        th.style.cursor = "pointer";
+        th.style.padding = "6px";
+        th.style.borderBottom = "1px solid #444";
+        th.style.color = "white";
+        th.style.textAlign = "left";
+        th.style.boxSizing = "border-box";
+
+
+        let asc = true;
+        th.onclick = () => {
+            sortTable(table, idx, asc);
+            asc = !asc;
+        };
+
+        headerRow.appendChild(th);
+    });
+
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
+    const tbody = document.createElement("tbody");
+
+    rows.forEach(row => {
+        const tr = document.createElement("tr");
+        row.forEach(cell => {
+            const td = document.createElement("td");
+            td.textContent = cell;
+            td.style.padding = "6px";
+            td.style.borderBottom = "1px solid #333";
+            td.style.color = "#ccc";
+            tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+    });
+
+    table.appendChild(tbody);
+
+    // initial sort
+    sortTable(table, defaultSort, false);
+
+    return table;
+}
+
+function sortTable(table, col, asc) {
+    const tbody = table.querySelector("tbody");
+    const rows = Array.from(tbody.querySelectorAll("tr"));
+
+    rows.sort((a, b) => {
+        let A = a.children[col].textContent;
+        let B = b.children[col].textContent;
+
+        const numA = parseFloat(A);
+        const numB = parseFloat(B);
+
+        if (!isNaN(numA) && !isNaN(numB)) {
+            return asc ? numA - numB : numB - numA;
+        }
+
+        return asc
+            ? A.localeCompare(B)
+            : B.localeCompare(A);
+    });
+
+    tbody.innerHTML = "";
+    rows.forEach(r => tbody.appendChild(r));
+}
+
+/* ---------- TEAMS TOTALS TABLE ---------- */
+
+function createTeamsTotalsTable() {
+    const wrapper = document.createElement("div");
+    wrapper.className = "matchup-card";
+
+    const title = document.createElement("h3");
+    title.textContent = "All-Time Team Totals";
+    wrapper.appendChild(title);
+
+    const headers = [
+        "Team",
+        "Points For",
+        "Points Against",
+        "Wins",
+        "Losses",
+        "Playoff W's",
+        "Playoff Games Played",
+        "Championships"
+    ];
+
+    const rows = teamsTotals.map(team => {
+        const idx = team.rosterId - 1;
+        const latestYear = years.at(-1);
+
+        const latestTeam = teams[idx][latestYear];
+        const latestOwnerId = latestTeam?.owner_id;
+
+        const latestName =
+            latestTeam?.teamName ??
+            latestTeam?.displayName ??
+            "Unknown";
+
+        const ownerMap = {};
+
+        for (const year of years) {
+            const teamYear = teams[idx][year];
+            if (!teamYear || !teamYear.owner_id) continue;
+
+            ownerMap[teamYear.owner_id] =
+                teamYear.teamName ??
+                teamYear.displayName ??
+                ownerMap[teamYear.owner_id];
+        }
+
+        delete ownerMap[latestOwnerId];
+
+        const historicalNames = Object.values(ownerMap);
+        const fullName =
+            historicalNames.length > 0
+                ? `${latestName} (${historicalNames.join(", ")})`
+                : latestName;
+
+        const playoffAppearances = team.playoffWins + team.playoffLosses;
+
+        return [
+            fullName,
+            team.fpts,
+            team.fpts_against,
+            team.wins,
+            team.losses,
+            team.playoffWins,
+            playoffAppearances,
+            team.champWins
+        ];
+    });
+
+    wrapper.appendChild(createTable(headers, rows, 1));
+    return wrapper;
+}
+
+
+
+
 async function main() {
     await fetchAllYears(currentYearID);
     await fetchLeagueData();
@@ -139,11 +307,11 @@ async function main() {
     await getTotalsData();
     await getYearsAvgs();
     await fillShortYears();
+    displayLeagueData();
     console.log(oppList);
 }
 
 main();
-console.log(oppList);
 console.log(teamsTotals);
 console.log(teams);
 console.log(leagueSettings);
