@@ -86,7 +86,7 @@ async function fetchMatchupStats(team1, team2) {
                 return;
             }
             if (teams[team1Idx][commonYears[i]]['matchups']['week' + j]['matchup_id'] == teams[team2Idx][commonYears[i]]['matchups']['week' + j]['matchup_id']) { // nasty code but... IF the two teams DID match up that week...
-                if ((j < leagueSettings[commonYears[i]]['settings']['playoff_week_start']) || (verifyPostseasonGame(j, teams[team1Idx][commonYears[i]]['matchups']['week' + j]['matchup_id'], leagueSettings[commonYears[i]]['settings']['playoff_teams']) == 0)) { // ... AND that game was EITHER in regular season OR it was a meaningful playoff game (not a game where the two teams were eliminated where neither teams sets their rosters), THEN its valid
+                if ((j < leagueSettings[commonYears[i]]['settings']['playoff_week_start']) || (verifyPlayoffGame(j, teams[team1Idx][commonYears[i]]['matchups']['week' + j]['matchup_id'], leagueSettings[commonYears[i]]['settings']['playoff_teams']) == 0)) { // ... AND that game was EITHER in regular season OR it was a meaningful playoff game (not a game where the two teams were eliminated where neither teams sets their rosters), THEN its valid
                     
                     let tempMatchupStats = {};
                     tempMatchupStats[commonYears[i] + "_" + j] = {
@@ -149,22 +149,6 @@ async function fetchMatchupStats(team1, team2) {
                 }
             }
         }
-    }
-}
-
-function verifyPostseasonGame(week, matchId, playoffSpots) { //disgusting code, but I did'nt feel like finding the equation that verifies a playoff game
-    if (week == 17 && matchId == 1) {
-        return 0;
-    } else if (week == 16 && matchId <= 2) {
-        return 0;
-    } else if (week == 15 && matchId <= 2) {
-        return 0;
-    } else if (playoffSpots > 6 && (week == 15 && matchId <= 3)) {
-        return 0;
-    } else if (playoffSpots == 8 && (week == 15 && matchId <= 4)) {
-        return 0;
-    } else {
-        return -1;
     }
 }
 

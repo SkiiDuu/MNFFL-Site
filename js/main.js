@@ -88,7 +88,7 @@ async function fetchOwnerData() {
             } else {
                 teamAvatarLink = "https://sleepercdn.com/avatars/" + avatarId;
             }
-            if (ownerId == "983169106620846080") { // special line because bbking in my league made a second account when he joined back into the league
+            if (ownerId == "983169106620846080") { // special line because theres a player in my league that made a second account when he joined back into the league
                 owners['1223692387906240512'].unshift([teams[i][years[j]]["displayName"], years[j], teams[i]["rosterId"], teams[i][years[j]]["teamName"], teamAvatarLink]);
             } else {
                 if (ownerId != undefined) {
@@ -100,7 +100,6 @@ async function fetchOwnerData() {
             }
          }
     }
-    
 }
 
 async function fetchLeagueData() {
@@ -175,4 +174,20 @@ function setLeagueSubPageLogo(avatarId) {
     logo.src = avatarId
         ? `https://sleepercdn.com/avatars/${avatarId}`
         : "assets/MNFFL2026.png";
+}
+
+function verifyPlayoffGame(week, matchId, playoffSpots) { //disgusting code, but I did'nt feel like finding the equation that verifies a playoff game
+    if (week == 17 && matchId == 1) {
+        return 0;
+    } else if (week == 16 && matchId <= 2) {
+        return 0;
+    } else if (week == 15 && matchId <= 2) {
+        return 0;
+    } else if (playoffSpots > 6 && (week == 15 && matchId <= 3)) {
+        return 0;
+    } else if (playoffSpots == 8 && (week == 15 && matchId <= 4)) {
+        return 0;
+    } else {
+        return -1;
+    }
 }
