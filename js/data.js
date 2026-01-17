@@ -133,7 +133,6 @@ function displayLeagueData() {
     container.innerHTML = "";
 
     container.appendChild(createTeamsTotalsTable());
-    container.appendChild(createYearsAveragesTable());
 }
 
 /* ---------- TABLE HELPERS ---------- */
@@ -233,7 +232,7 @@ function createTeamsTotalsTable() {
         "Wins",
         "Losses",
         "Playoff W's",
-        "Playoff Games Played",
+        "Playoff Appearances",
         "Championships"
     ];
 
@@ -242,34 +241,30 @@ function createTeamsTotalsTable() {
         const latestYear = years.at(-1);
 
         const latestTeam = teams[idx][latestYear];
-        const latestOwnerId = latestTeam?.owner_id;
 
-        const latestName =
-            latestTeam?.teamName ??
-            latestTeam?.displayName ??
-            "Unknown";
+        const teamName =
+            latestTeam.teamName ??
+            latestTeam.displayName ??
+            "Unknown Team";
 
-        const ownerMap = {};
+        const ownerNames = [];
+        let lastOwnerId = null;
 
-        for (const year of years) {
-            const teamYear = teams[idx][year];
-            if (!teamYear || !teamYear.owner_id) continue;
+        // walk years from newest → oldest
+        for (let i = years.length - 1; i >= 0; i--) {
+            const year = years[i];
+            const t = teams[idx][year];
+            if (!t) continue;
 
-            ownerMap[teamYear.owner_id] =
-                teamYear.teamName ??
-                teamYear.displayName ??
-                ownerMap[teamYear.owner_id];
+            // Add owner if different from last seen owner and displayName exists
+            if (t.ownerId !== lastOwnerId && t.displayName) {
+                console.log(t.displayName);
+                ownerNames.push(t.displayName);
+                lastOwnerId = t.ownerId;
+            }
         }
 
-        delete ownerMap[latestOwnerId];
-
-        const historicalNames = Object.values(ownerMap);
-        const fullName =
-            historicalNames.length > 0
-                ? `${latestName} (${historicalNames.join(", ")})`
-                : latestName;
-
-        const playoffAppearances = team.playoffWins + team.playoffLosses;
+        const fullName = `${teamName} (${ownerNames.join(", ")})`;
 
         return [
             fullName,
@@ -278,7 +273,7 @@ function createTeamsTotalsTable() {
             team.wins,
             team.losses,
             team.playoffWins,
-            playoffAppearances,
+            team.playoffWins + team.playoffLosses,
             team.champWins
         ];
     });
@@ -286,8 +281,6 @@ function createTeamsTotalsTable() {
     wrapper.appendChild(createTable(headers, rows, 1));
     return wrapper;
 }
-
-
 
 
 async function main() {
