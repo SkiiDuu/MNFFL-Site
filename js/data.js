@@ -232,7 +232,7 @@ function createTeamsTotalsTable() {
         "Wins",
         "Losses",
         "Playoff W's",
-        "Playoff Appearances",
+        "Playoff Games Played",
         "Championships"
     ];
 
