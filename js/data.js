@@ -258,7 +258,7 @@ function createTeamsTotalsTable() {
 
             // Add owner if different from last seen owner and displayName exists
             if (t.ownerId !== lastOwnerId && t.displayName) {
-                console.log(t.displayName);
+                //console.log(t.displayName);
                 ownerNames.push(t.displayName);
                 lastOwnerId = t.ownerId;
             }
@@ -301,12 +301,12 @@ async function main() {
     await getYearsAvgs();
     await fillShortYears();
     displayLeagueData();
-    console.log(oppList);
+    //console.log(oppList);
 }
 
 main();
-console.log(teamsTotals);
+/* console.log(teamsTotals);
 console.log(teams);
 console.log(leagueSettings);
 console.log(shortYears);
-console.log(yearsAvgs);
+console.log(yearsAvgs); */
