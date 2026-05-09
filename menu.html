@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="style.css">
     <link id="favicon" rel="icon" href="" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
-    <title> FantasyScanner </title>
+    <title> FantasyScannr </title>
 
   </head>
   <body>
@@ -43,6 +43,10 @@
     
     <div id="leagueTable"></div>
 
+    <div style="position: fixed; top: 15px; right: 15px; z-index: 999;">
+      <input id="leagueIDInput" type="text" placeholder="Enter Sleeper League ID" style="font-family: 'Oswald', sans-serif; font-size: 14px; padding: 6px; background-color: #1f1d1d; color: white; border: 1px solid white; border-radius: 8px; width: 220px;">
+      <button onclick="changeLeague()" class="menu2" style="width: 80px; height: 30px; font-size: 13px;">Load</button>
+    </div>
     <script src="js/main.js"> </script>
     <script src="js/menu.js"> </script>
 

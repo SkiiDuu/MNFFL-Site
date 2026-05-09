@@ -22,8 +22,20 @@ function setLeagueName(name) {
     el.textContent = name;
 }
 
+function changeLeague() {
+    const input = document.getElementById("leagueIDInput").value.trim();
+    if (input !== "") {
+        localStorage.setItem("leagueID", input);
+        location.reload();
+    }
+}
 
 async function main(){
+    const savedID = localStorage.getItem("leagueID");
+    if (savedID) {
+        currentYearID = savedID;
+    }
+
     await fetchAllYears(currentYearID);
     await generateBanner();
     await fetchLeagueData();
